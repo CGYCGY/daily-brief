@@ -27,7 +27,7 @@ Auth:
   config.json       { "xai_api_key": "..." } — sibling of SKILL.md.
 
 Output:
-  Default: writes JSON to responses/YYYYMMDD-HHMMSS.json; prints the file path.
+  Default: writes JSON to responses/YYYYMMDD-HHMMSSmmm.json; prints the file path.
   With --stdout: prints the JSON directly; no file written.
 `;
 
@@ -138,7 +138,7 @@ if (useStdout) {
   const ts = new Date()
     .toISOString()
     .replace(/[-:]/g, "")
-    .replace(/\.\d+Z$/, "")
+    .replace(/\.(\d+)Z$/, "$1")
     .replace("T", "-");
   const filepath = join(RESPONSES_DIR, `${ts}.json`);
   await writeFile(filepath, out);

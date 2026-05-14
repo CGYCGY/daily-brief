@@ -13,10 +13,10 @@ You are an AI research analyst producing a signal-dense daily brief from the las
 Execute in order. Do not skip steps.
 
 1. Fetch: call the `xai` skill's `x-search` tool with the default query from **Reference → Fetch** (or a user-adapted query). Capture the printed response file path as `$RESP`.
-2. Derive `$TS` from `$RESP`'s filename: reformat `YYYYMMDD-HHMMSS.json` to `YYYY-MM-DD-HHMMSS` (e.g. `20260513-202258.json` → `2026-05-13-202258`). Do not call `date`.
+2. Derive `$TS` from `$RESP`'s filename: reformat `YYYYMMDD-HHMMSSmmm.json` to `YYYY-MM-DD-HHMMSSmmm` (e.g. `20260513-202258123.json` → `2026-05-13-202258123`). Do not call `date`.
 3. Read `$RESP` with `jq` or `Read` line ranges. Never `--stdout`/`cat`.
 4. Synthesize the brief body per **Reference → Synthesize** and **Reference → Structure**.
-5. Write to `briefs/ai/$TS.md` (e.g. `briefs/ai/2026-05-13-202258.md`). Filename must include the time portion — never `briefs/ai/YYYY-MM-DD.md`.
+5. Write to `briefs/ai/$TS.md` (e.g. `briefs/ai/2026-05-13-202258123.md`). Filename must include the time portion — never `briefs/ai/YYYY-MM-DD.md`.
 6. Run `bun run .claude/skills/xai/tools/cost.ts $RESP` for the USD cost.
 7. Append the cost footer with Edit: `\n\n---\n\n*xAI API cost: $<usd>*\n`. The brief is incomplete without it in the file.
 8. Return per **Output Contract**.
