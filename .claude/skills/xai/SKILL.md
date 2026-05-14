@@ -33,18 +33,11 @@ Wraps `POST https://api.x.ai/v1/responses` with the `x_search` tool. Writes the 
 - **Does:** POSTs to `https://api.x.ai/v1/responses` with the `x_search` tool. Default: writes JSON to `responses/<timestamp>.json` and prints the path. With `--stdout`: prints JSON directly, no file written.
 - **Triggers:** "search X", "find X posts", "scan X for", "what's trending on X about", "get X data for the last 24h"
 
-### cost
-- **Run:** `bun run ${CLAUDE_SKILL_DIR}/tools/cost.ts [<file>]`
-- **Args:** `file (path, optional)` — path to a response JSON. Omit to sum all files in `responses/`.
-- **Does:** Prints xAI cost in USD (4 decimals, no `$`). Single-file mode: cost of one response. No-args mode: per-file table plus TOTAL across all responses.
-- **Triggers:** "how much did that cost", "total xai spend", "cost of this run", "lifetime xai cost"
-
-## Supporting Files
-
-- `tools/x-search.ts` - x_search wrapper (run with Bun)
-- `tools/cost.ts` - cost calculator from response files (run with Bun)
-- `config.json.example` - template for the API key file
-- `.gitignore` - excludes `config.json` and `responses/` from version control
+### usage
+- **Run:** `bun run ${CLAUDE_SKILL_DIR}/tools/usage.ts [<file>] [--append <target>]`
+- **Args:** `file (path, optional)` — path to a response JSON. Omit to sum all files in `responses/`. `--append <target>` — append the usage footer to `<target>` instead of printing TSV (requires `<file>`).
+- **Does:** Reads xAI cost (USD, 4 decimals, no `$`) and tool-call count from `usage.num_server_side_tools_used`. Modes: (a) single-file → prints TSV `<cost>\t<tool_calls>`; (b) single-file `--append <target>` → same TSV on stdout AND appends `\n\n---\n\n*xAI API usage: $<cost> · tool calls: <n>*\n` to `<target>`; (c) no-args → per-file table `<filename>\t<cost>\t<tool_calls>` plus TOTAL row with sums.
+- **Triggers:** "how much did that cost", "how many tool calls", "x_search count", "total xai spend", "cost of this run", "lifetime xai cost"
 
 ## Report
 

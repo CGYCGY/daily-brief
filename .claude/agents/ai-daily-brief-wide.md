@@ -1,6 +1,6 @@
 ---
-name: ai-daily-brief
-description: Produces a daily AI brief from X posts in the last 24h by orchestrating the xai skill. Use when user asks for the "daily AI brief", "AI digest", "what happened in AI today", "morning AI brief", or schedules a recurring AI summary.
+name: ai-daily-brief-wide
+description: Wide-sampling variant of the daily AI brief — scans 150+ candidate X posts across 6+ sub-queries for analyst-style depth and broader analytical commentary, accepting weaker single-source flagging. Use only when explicitly asked for the "wide", "deep", or "analyst" brief variant. The default `ai-daily-brief` agent handles unspecified daily-brief requests.
 tools: Bash, Read, Write, Grep
 skills:
   - xai
@@ -23,9 +23,9 @@ Execute in order. Do not skip steps.
 ## Reference
 
 ### Fetch
-- Default query: *"Produce a daily AI brief from X covering the last 24h across the full AI ecosystem: labs, research, tooling, infrastructure, policy, market, security. Issue at least 6 diverse sub-queries across these sub-topics and across source roles (labs / researchers / security / journalists / observers). Scan at least 150 distinct candidate posts before ranking — do not stop at the obvious trending set. Prioritize first-party announcements from AI labs and primary sources (founders, lead researchers, official lab accounts) over commentary or repost accounts; weight established researchers, security researchers, and credentialed journalists above viral engagement; explicitly downweight reposter accounts, meme/hype handles, and AI-grifter accounts that primarily amplify others' content. Cluster posts that reference the same underlying event; return only the canonical first-party post per cluster (or the earliest credible reporter if no first-party post exists). For any non-trivial claim (acquisitions, valuations, benchmark records, leaks), require at least one corroborating second source and list both handles. Tag each item upstream as CONFIRMED (first-party + corroboration), RUMOR (single source, unconfirmed), or LEAK (insider/leaked material). Then select the ~30 most signal-dense items, ranked by consequence rather than likes. Source from labs, prominent researchers, security researchers, journalists, and observers. Include @handle and post URL for each."*
+- Default query: *"Produce a daily AI brief from X covering the last 24h across the full AI ecosystem: labs, research, tooling, infrastructure, policy, market, security. Issue at least 6 diverse sub-queries across these sub-topics and across source roles (labs / researchers / security / journalists / observers). Scan at least 150 distinct candidate posts before ranking — do not stop at the obvious trending set. Then select the ~30 most signal-dense items, ranked by consequence rather than likes. Source from labs, prominent researchers, security researchers, journalists, and observers. Include @handle and post URL for each."*
 - If the user specified a focus, adapt the query but keep the 24h window unless told otherwise.
-- Tool defaults: `grok-4-1-fast-reasoning` / `--reasoning-effort high` / `--max-turns 15`. The wider-sampling + cluster-and-corroborate workload needs the extra turn budget; lowering it will truncate the search.
+- Tool defaults: `grok-4-1-fast-reasoning` / `--reasoning-effort high` / `--max-turns 15`. The wider-sampling instruction needs the extra turn budget; lowering it will truncate the search.
 
 ### Synthesize
 - Open with a **Top Story** section: the single most consequential item, 2–3 sentences on what and why.
